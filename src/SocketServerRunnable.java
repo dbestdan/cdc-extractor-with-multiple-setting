@@ -16,9 +16,8 @@ public class SocketServerRunnable implements Runnable {
 	private long freshness = 0L;
 	private Object lock = null;
 
-	public SocketServerRunnable(long sessionEndTime, Object lock) {
+	public SocketServerRunnable(Object lock) {
 		this.lock = lock;
-		this.sessionEndTime = sessionEndTime;
 		socketPortNumber = Integer.parseInt(System.getProperty("socketPortNumber"));
 		synchronized (Client.freshness) {
 			this.freshness = Client.freshness.getTime();
@@ -36,7 +35,7 @@ public class SocketServerRunnable implements Runnable {
 
 	@Override
 	public void run() {
-		while (System.currentTimeMillis() < sessionEndTime) {
+		while (true) {
 			try {
 				System.out.println("Socket Runnable");
 				while (freshness == Client.freshness.getTime()) {
@@ -55,6 +54,8 @@ public class SocketServerRunnable implements Runnable {
 			} catch (InterruptedException | IOException e) {
 				// TODO Auto-generated catch block
 				e.printStackTrace();
+				System.out.println("Problem in CDC extractor");
+				System.exit(1);
 			}
 
 		}

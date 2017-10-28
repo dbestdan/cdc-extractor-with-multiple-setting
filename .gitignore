@@ -3,3 +3,4 @@ staleness*
 bin/*
 dist/*
 lib/*
+/bin/
